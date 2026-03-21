@@ -22,9 +22,10 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS responses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     event_id INTEGER NOT NULL REFERENCES events(id),
+    username TEXT,
     rahmen INTEGER CHECK(rahmen BETWEEN 1 AND 5),
-    relevanz INTEGER CHECK(relevanz BETWEEN 1 AND 4),
-    weiterverfolgen INTEGER CHECK(weiterverfolgen BETWEEN 1 AND 4),
+    relevanz INTEGER CHECK(relevanz BETWEEN 1 AND 5),
+    weiterverfolgen INTEGER CHECK(weiterverfolgen BETWEEN 1 AND 5),
     freitext TEXT,
     created_at TEXT DEFAULT (datetime('now'))
   );
@@ -54,13 +55,16 @@ app.post('/api/feedback/:slug', (req, res) => {
   const event = db.prepare('SELECT id FROM events WHERE slug = ? AND active = 1').get(slug);
   if (!event) return res.status(404).json({ error: 'Event nicht gefunden' });
 
-  const { rahmen, relevanz, weiterverfolgen, freitext } = req.body;
+  const { username, rahmen, relevanz, weiterverfolgen, freitext } = req.body;
   if (!rahmen || !relevanz || !weiterverfolgen) {
     return res.status(400).json({ error: 'Bitte alle Skalen ausfüllen' });
   }
+  if (!username || !username.trim()) {
+    return res.status(400).json({ error: 'Bitte gib deinen Namen ein' });
+  }
 
-  db.prepare('INSERT INTO responses (event_id, rahmen, relevanz, weiterverfolgen, freitext) VALUES (?, ?, ?, ?, ?)')
-    .run(event.id, rahmen, relevanz, weiterverfolgen, freitext || null);
+  db.prepare('INSERT INTO responses (event_id, username, rahmen, relevanz, weiterverfolgen, freitext) VALUES (?, ?, ?, ?, ?, ?)')
+    .run(event.id, username.trim(), rahmen, relevanz, weiterverfolgen, freitext || null);
 
   const stats = getStats(event.id);
   broadcast(slug, stats);
@@ -114,9 +118,9 @@ app.get('/api/export/:slug', (req, res) => {
   const { slug } = req.params;
   const event = db.prepare('SELECT id, name FROM events WHERE slug = ?').get(slug);
   if (!event) return res.status(404).json({ error: 'Event nicht gefunden' });
-  const rows = db.prepare('SELECT rahmen, relevanz, weiterverfolgen, freitext, created_at FROM responses WHERE event_id = ? ORDER BY created_at').all(event.id);
-  const header = 'Rahmen,Relevanz,Weiterverfolgen,Freitext,Zeitpunkt\n';
-  const csv = rows.map(r => `${r.rahmen},${r.relevanz},${r.weiterverfolgen},"${(r.freitext||'').replace(/"/g,'""')}",${r.created_at}`).join('\n');
+  const rows = db.prepare('SELECT username, rahmen, relevanz, weiterverfolgen, freitext, created_at FROM responses WHERE event_id = ? ORDER BY created_at').all(event.id);
+  const header = 'Name,Rahmen,Relevanz,Weiterverfolgen,Freitext,Zeitpunkt\n';
+  const csv = rows.map(r => `"${(r.username||'').replace(/"/g,'""')}",${r.rahmen},${r.relevanz},${r.weiterverfolgen},"${(r.freitext||'').replace(/"/g,'""')}",${r.created_at}`).join('\n');
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', `attachment; filename="wirkungsmessung-${slug}.csv"`);
   res.send(header + csv);

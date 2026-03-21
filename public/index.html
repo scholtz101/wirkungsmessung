@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Wirkungsmessung – Nachhaltig Wirken</title>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#2d3a8c">
@@ -16,7 +16,6 @@
   --card: #fff;
   --text: #1a1a2e;
   --text-muted: #666;
-  --dot: #e8782a;
   --radius: 12px;
   --shadow: 0 2px 12px rgba(0,0,0,.08);
 }
@@ -34,25 +33,60 @@ body {
 .header .subtitle { font-size: .85rem; opacity: .85; margin-top: 4px; }
 .container { flex: 1; max-width: 600px; width: 100%; margin: 0 auto; padding: 16px; }
 
-/* Scale question */
-.question { margin-bottom: 28px; }
+/* Name input */
+.name-field { margin-bottom: 24px; }
+.name-field label { display: block; font-size: 1rem; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+.name-field input {
+  width: 100%; padding: 14px 16px; border: 2px solid #ddd; border-radius: var(--radius);
+  font-size: 1rem; font-family: inherit; transition: border-color .2s;
+}
+.name-field input:focus { border-color: var(--primary); outline: none; }
+
+/* Slider question */
+.question { margin-bottom: 32px; }
 .question h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
-.question .hint { font-size: .78rem; color: var(--text-muted); margin-bottom: 12px; }
-.scale { display: flex; gap: 6px; justify-content: space-between; }
-.scale label {
-  flex: 1; text-align: center; cursor: pointer; position: relative;
+.question .hint { font-size: .78rem; color: var(--text-muted); margin-bottom: 14px; }
+
+.slider-wrap { position: relative; padding: 0 4px; }
+.slider-labels {
+  display: flex; justify-content: space-between; margin-bottom: 8px;
+  font-size: .7rem; color: var(--text-muted); line-height: 1.2;
 }
-.scale input { display: none; }
-.scale .dot {
-  display: block; width: 44px; height: 44px; margin: 0 auto 4px;
-  border-radius: 50%; border: 3px solid #ddd; background: #fff;
-  transition: all .2s;
+.slider-labels span { text-align: center; width: 20%; }
+.slider-labels span:first-child { text-align: left; }
+.slider-labels span:last-child { text-align: right; }
+
+.slider-track {
+  position: relative; width: 100%; height: 48px;
+  display: flex; align-items: center;
 }
-.scale input:checked + .dot {
-  background: var(--dot); border-color: var(--dot);
-  box-shadow: 0 0 0 4px rgba(232,120,42,.2);
+
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 8px; border-radius: 4px;
+  background: linear-gradient(to right, #d32f2f, #f57c00, #fbc02d, #7cb342, #388e3c);
+  outline: none; cursor: pointer;
 }
-.scale .lbl { font-size: .65rem; color: var(--text-muted); line-height: 1.2; }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #fff; border: 4px solid var(--primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  cursor: grab;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #fff; border: 4px solid var(--primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  cursor: grab; border: 4px solid var(--primary);
+}
+input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; transform: scale(1.1); }
+
+.slider-value {
+  text-align: center; font-size: .85rem; font-weight: 600;
+  color: var(--primary); margin-top: 6px; min-height: 1.3em;
+}
+.slider-unset .slider-value { color: var(--text-muted); font-style: italic; }
 
 /* Freitext */
 .freitext { margin-bottom: 24px; }
@@ -87,9 +121,9 @@ body {
 }
 .result-card h3 { font-size: .95rem; color: var(--primary); margin-bottom: 12px; }
 .bar-row { display: flex; align-items: center; margin-bottom: 6px; gap: 8px; }
-.bar-label { font-size: .75rem; width: 80px; text-align: right; color: var(--text-muted); flex-shrink: 0; }
+.bar-label { font-size: .72rem; width: 100px; text-align: right; color: var(--text-muted); flex-shrink: 0; }
 .bar-track { flex: 1; height: 28px; background: #eee; border-radius: 14px; overflow: hidden; position: relative; }
-.bar-fill { height: 100%; background: var(--dot); border-radius: 14px; transition: width .5s ease; min-width: 2px; }
+.bar-fill { height: 100%; border-radius: 14px; transition: width .5s ease; min-width: 2px; }
 .bar-count { font-size: .75rem; width: 30px; color: var(--text-muted); }
 .stat-total { text-align: center; font-size: 2.5rem; font-weight: 800; color: var(--primary); }
 .stat-label { text-align: center; color: var(--text-muted); font-size: .85rem; }
@@ -129,10 +163,9 @@ body {
 }
 .nav a.active { background: var(--primary); color: #fff; }
 
-/* Responsive */
 @media (max-width: 400px) {
-  .scale .dot { width: 36px; height: 36px; }
-  .scale .lbl { font-size: .58rem; }
+  .slider-labels { font-size: .6rem; }
+  input[type="range"]::-webkit-slider-thumb { width: 30px; height: 30px; }
 }
 </style>
 </head>
@@ -151,8 +184,12 @@ body {
 
 <script>
 const app = document.getElementById('app');
+const LABELS_5 = ['überhaupt nicht', 'eher nicht', 'weiß nicht', 'eher ja', 'ja, sehr'];
+const COLORS_5 = ['#d32f2f', '#f57c00', '#fbc02d', '#7cb342', '#388e3c'];
 
-// Router
+// Track which sliders the user has touched
+const touched = { rahmen: false, relevanz: false, weiterverfolgen: false };
+
 function getRoute() {
   const p = location.pathname;
   if (p.startsWith('/event/')) return { view: 'feedback', slug: p.split('/')[2] };
@@ -161,16 +198,12 @@ function getRoute() {
   return { view: 'home' };
 }
 
-function navigate(path) {
-  history.pushState(null, '', path);
-  render();
-}
-
+function navigate(path) { history.pushState(null, '', path); render(); }
 window.addEventListener('popstate', render);
 
-// Views
 function render() {
   const route = getRoute();
+  touched.rahmen = false; touched.relevanz = false; touched.weiterverfolgen = false;
   switch (route.view) {
     case 'feedback': renderFeedback(route.slug); break;
     case 'results': renderResults(route.slug); break;
@@ -189,80 +222,86 @@ function renderHome() {
         <a href="/admin" onclick="event.preventDefault();navigate('/admin')">Events verwalten</a>
         <a href="/event/default" onclick="event.preventDefault();navigate('/event/default')">Demo ausprobieren</a>
       </div>
-    </div>
-  `;
+    </div>`;
+}
+
+function sliderHtml(name, question, hint) {
+  return `
+    <div class="question">
+      <h3>${question}</h3>
+      ${hint ? `<div class="hint">${hint}</div>` : ''}
+      <div class="slider-wrap slider-unset" id="wrap-${name}">
+        <div class="slider-labels">
+          ${LABELS_5.map(l => `<span>${l}</span>`).join('')}
+        </div>
+        <div class="slider-track">
+          <input type="range" min="1" max="5" value="3" step="1" id="slider-${name}"
+                 oninput="onSlide('${name}', this.value)">
+        </div>
+        <div class="slider-value" id="val-${name}">← bitte bewerten →</div>
+      </div>
+    </div>`;
+}
+
+function onSlide(name, val) {
+  touched[name] = true;
+  const wrap = document.getElementById('wrap-' + name);
+  wrap.classList.remove('slider-unset');
+  document.getElementById('val-' + name).textContent = LABELS_5[val - 1];
+  document.getElementById('val-' + name).style.color = COLORS_5[val - 1];
+  if (navigator.vibrate) navigator.vibrate(10);
 }
 
 function renderFeedback(slug) {
+  // Restore name from localStorage
+  const savedName = localStorage.getItem('wm-username') || '';
+
   app.innerHTML = `
-    <div style="margin-top:8px">
+    <div style="margin-top:12px">
+      <div class="name-field">
+        <label for="username">👤 Dein Name</label>
+        <input type="text" id="username" placeholder="Vorname Nachname" value="${escHtml(savedName)}" autocomplete="name">
+      </div>
+
+      ${sliderHtml('rahmen',
+        'Wie hat dir der Rahmen der Veranstaltung gefallen?',
+        'Gesprächs-/Workshopformat, Moderation, Setting, Veranstaltungsort')}
+
+      ${sliderHtml('relevanz',
+        'Wie relevant schätzt du die Inhalte für dich ein?',
+        '')}
+
+      ${sliderHtml('weiterverfolgen',
+        'Wie wahrscheinlich ist es, dass du das Thema weiter verfolgst?',
+        '')}
+
       <div class="freitext">
         <h3>💬 Dein Feedback</h3>
         <div class="hint">Diesen Impuls habe ich heute mitgenommen… / Diesen Gedanken möchte ich gerne noch da lassen…</div>
         <textarea id="freitext" placeholder="Dein Kommentar (optional)…"></textarea>
       </div>
 
-      <div class="question">
-        <h3>Wie hat dir der Rahmen der Veranstaltung gefallen?</h3>
-        <div class="hint">Gesprächs-/Workshopformat, Moderation, Setting, Veranstaltungsort</div>
-        <div class="scale" id="scale-rahmen">
-          ${scaleOptions('rahmen', [
-            {v:1,l:'sehr gut'},{v:2,l:'gut'},{v:3,l:'mittel'},{v:4,l:'schlecht'},{v:5,l:'sehr schlecht'}
-          ])}
-        </div>
-      </div>
-
-      <div class="question">
-        <h3>Wie relevant schätzt du die Inhalte für dich ein?</h3>
-        <div class="scale" id="scale-relevanz">
-          ${scaleOptions('relevanz', [
-            {v:1,l:'sehr relevant'},{v:2,l:'relevant'},{v:3,l:'wenig relevant'},{v:4,l:'nicht relevant'}
-          ])}
-        </div>
-      </div>
-
-      <div class="question">
-        <h3>Wie wahrscheinlich ist es, dass du das Thema weiter verfolgst?</h3>
-        <div class="scale" id="scale-weiterverfolgen">
-          ${scaleOptions('weiterverfolgen', [
-            {v:1,l:'sehr wahrscheinlich'},{v:2,l:'wahrscheinlich'},{v:3,l:'wenig wahrscheinlich'},{v:4,l:'sehr unwahrscheinlich'}
-          ])}
-        </div>
-      </div>
-
       <button class="btn btn-accent" id="submit-btn" onclick="submitFeedback('${slug}')">Feedback absenden ✓</button>
-    </div>
-  `;
-
-  // Add haptic feedback on dot tap
-  document.querySelectorAll('.scale input').forEach(input => {
-    input.addEventListener('change', () => {
-      if (navigator.vibrate) navigator.vibrate(15);
-    });
-  });
-}
-
-function scaleOptions(name, opts) {
-  return opts.map(o => `
-    <label>
-      <input type="radio" name="${name}" value="${o.v}">
-      <span class="dot"></span>
-      <span class="lbl">${o.l}</span>
-    </label>
-  `).join('');
+    </div>`;
 }
 
 async function submitFeedback(slug) {
   const btn = document.getElementById('submit-btn');
-  const rahmen = document.querySelector('input[name="rahmen"]:checked')?.value;
-  const relevanz = document.querySelector('input[name="relevanz"]:checked')?.value;
-  const weiterverfolgen = document.querySelector('input[name="weiterverfolgen"]:checked')?.value;
+  const username = document.getElementById('username').value.trim();
   const freitext = document.getElementById('freitext').value.trim();
 
-  if (!rahmen || !relevanz || !weiterverfolgen) {
-    alert('Bitte beantworte alle drei Skala-Fragen.');
+  if (!username) { alert('Bitte gib deinen Namen ein.'); document.getElementById('username').focus(); return; }
+  if (!touched.rahmen || !touched.relevanz || !touched.weiterverfolgen) {
+    alert('Bitte bewege alle drei Schieberegler.');
     return;
   }
+
+  const rahmen = +document.getElementById('slider-rahmen').value;
+  const relevanz = +document.getElementById('slider-relevanz').value;
+  const weiterverfolgen = +document.getElementById('slider-weiterverfolgen').value;
+
+  // Save name for next time
+  localStorage.setItem('wm-username', username);
 
   btn.disabled = true;
   btn.textContent = 'Wird gesendet…';
@@ -271,26 +310,22 @@ async function submitFeedback(slug) {
     const res = await fetch(`/api/feedback/${slug}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        rahmen: +rahmen, relevanz: +relevanz,
-        weiterverfolgen: +weiterverfolgen, freitext
-      })
+      body: JSON.stringify({ username, rahmen, relevanz, weiterverfolgen, freitext })
     });
-    if (!res.ok) throw new Error('Fehler');
+    if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
 
     app.innerHTML = `
       <div class="thanks">
         <div class="check">✅</div>
-        <h2>Danke, dass du dabei warst!</h2>
+        <h2>Danke, ${escHtml(username)}!</h2>
         <p style="color:var(--text-muted);margin-bottom:24px">Dein Feedback hilft uns, besser zu werden.</p>
         <button class="btn" onclick="navigate('/results/${slug}')" style="max-width:280px;margin:0 auto">Ergebnisse ansehen →</button>
-      </div>
-    `;
+      </div>`;
     if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
   } catch (e) {
     btn.disabled = false;
     btn.textContent = 'Feedback absenden ✓';
-    alert('Fehler beim Senden. Bitte erneut versuchen.');
+    alert(e.message || 'Fehler beim Senden.');
   }
 }
 
@@ -300,23 +335,16 @@ function renderResults(slug) {
       <a href="/event/${slug}" onclick="event.preventDefault();navigate('/event/${slug}')">Feedback geben</a>
       <a href="/results/${slug}" class="active">Ergebnisse</a>
     </div>
-    <div id="results-content"><p style="text-align:center;color:var(--text-muted)">Lade Ergebnisse…</p></div>
-  `;
+    <div id="results-content"><p style="text-align:center;color:var(--text-muted)">Lade Ergebnisse…</p></div>`;
   loadResults(slug);
-
-  // SSE live updates
   const es = new EventSource(`/api/stream/${slug}`);
-  es.onmessage = (e) => {
-    const data = JSON.parse(e.data);
-    renderResultsData(data, slug);
-  };
+  es.onmessage = (e) => renderResultsData(JSON.parse(e.data), slug);
 }
 
 async function loadResults(slug) {
   try {
     const res = await fetch(`/api/results/${slug}`);
-    const data = await res.json();
-    renderResultsData(data, slug);
+    renderResultsData(await res.json(), slug);
   } catch (e) {
     document.getElementById('results-content').innerHTML = '<p>Fehler beim Laden.</p>';
   }
@@ -326,10 +354,6 @@ function renderResultsData(data, slug) {
   const container = document.getElementById('results-content');
   if (!container) return;
 
-  const rahmenLabels = ['sehr gut','gut','mittel','schlecht','sehr schlecht'];
-  const relevanzLabels = ['sehr relevant','relevant','wenig relevant','nicht relevant'];
-  const weiterLabels = ['sehr wahrscheinlich','wahrscheinlich','wenig wahrscheinlich','sehr unwahrscheinlich'];
-
   container.innerHTML = `
     <div class="result-card">
       <div class="stat-total">${data.total}</div>
@@ -337,15 +361,15 @@ function renderResultsData(data, slug) {
     </div>
     <div class="result-card">
       <h3>Rahmen der Veranstaltung</h3>
-      ${barChart(data.rahmen, rahmenLabels, data.total, 5)}
+      ${barChart(data.rahmen, LABELS_5, COLORS_5, data.total, 5)}
     </div>
     <div class="result-card">
       <h3>Relevanz der Inhalte</h3>
-      ${barChart(data.relevanz, relevanzLabels, data.total, 4)}
+      ${barChart(data.relevanz, LABELS_5, COLORS_5, data.total, 5)}
     </div>
     <div class="result-card">
       <h3>Thema weiter verfolgen</h3>
-      ${barChart(data.weiterverfolgen, weiterLabels, data.total, 4)}
+      ${barChart(data.weiterverfolgen, LABELS_5, COLORS_5, data.total, 5)}
     </div>
     ${data.freitexte.length ? `
     <div class="result-card">
@@ -354,28 +378,24 @@ function renderResultsData(data, slug) {
         ${data.freitexte.map(t => `<li>${escHtml(t)}</li>`).join('')}
       </ul>
     </div>` : ''}
-    <a href="/api/export/${slug}" class="btn" style="text-decoration:none;text-align:center;margin-top:8px;display:block">CSV Export ↓</a>
-  `;
+    <a href="/api/export/${slug}" class="btn" style="text-decoration:none;text-align:center;margin-top:8px;display:block">CSV Export ↓</a>`;
 }
 
-function barChart(values, labels, total, max) {
+function barChart(values, labels, colors, total, max) {
   const map = {};
   values.forEach(v => map[v.v] = v.c);
   return Array.from({length: max}, (_, i) => {
-    const v = i + 1;
-    const count = map[v] || 0;
+    const v = i + 1, count = map[v] || 0;
     const pct = total ? (count / total * 100) : 0;
     return `<div class="bar-row">
       <span class="bar-label">${labels[i]}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${colors[i]}"></div></div>
       <span class="bar-count">${count}</span>
     </div>`;
   }).join('');
 }
 
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function renderAdmin() {
   app.innerHTML = `
@@ -385,8 +405,7 @@ function renderAdmin() {
       <input id="ev-slug" placeholder="URL-Slug (z.B. workshop-2026)">
       <button class="btn" style="flex:0 0 auto;width:auto;padding:10px 20px" onclick="createEvent()">Erstellen</button>
     </div>
-    <ul class="event-list" id="event-list"></ul>
-  `;
+    <ul class="event-list" id="event-list"></ul>`;
   loadEvents();
 }
 
@@ -400,8 +419,7 @@ async function loadEvents() {
         <div style="font-size:.75rem;color:var(--text-muted)">/${e.slug}</div>
       </div>
       <a href="/results/${e.slug}" onclick="event.preventDefault();navigate('/results/${e.slug}')" style="font-size:.85rem">Ergebnisse →</a>
-    </li>
-  `).join('');
+    </li>`).join('');
 }
 
 async function createEvent() {
@@ -409,26 +427,14 @@ async function createEvent() {
   const slug = document.getElementById('ev-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
   if (!name || !slug) return alert('Name und Slug benötigt');
   const res = await fetch('/api/events', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, slug })
   });
-  if (res.ok) {
-    document.getElementById('ev-name').value = '';
-    document.getElementById('ev-slug').value = '';
-    loadEvents();
-  } else {
-    const err = await res.json();
-    alert(err.error);
-  }
+  if (res.ok) { document.getElementById('ev-name').value = ''; document.getElementById('ev-slug').value = ''; loadEvents(); }
+  else { const err = await res.json(); alert(err.error); }
 }
 
-// PWA
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js');
-}
-
-// Init
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
 render();
 </script>
 </body>
