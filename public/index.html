@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Wirkungsmessung – Nachhaltig Wirken</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#2d3a8c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+:root {
+  --primary: #2d3a8c;
+  --primary-light: #4a5abf;
+  --accent: #e8782a;
+  --bg: #f5f0eb;
+  --card: #fff;
+  --text: #1a1a2e;
+  --text-muted: #666;
+  --dot: #e8782a;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height: 100dvh; display: flex; flex-direction: column;
+}
+.header {
+  background: var(--primary); color: #fff; padding: 20px 16px;
+  text-align: center;
+}
+.header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: .02em; }
+.header .subtitle { font-size: .85rem; opacity: .85; margin-top: 4px; }
+.container { flex: 1; max-width: 600px; width: 100%; margin: 0 auto; padding: 16px; }
+
+/* Scale question */
+.question { margin-bottom: 28px; }
+.question h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
+.question .hint { font-size: .78rem; color: var(--text-muted); margin-bottom: 12px; }
+.scale { display: flex; gap: 6px; justify-content: space-between; }
+.scale label {
+  flex: 1; text-align: center; cursor: pointer; position: relative;
+}
+.scale input { display: none; }
+.scale .dot {
+  display: block; width: 44px; height: 44px; margin: 0 auto 4px;
+  border-radius: 50%; border: 3px solid #ddd; background: #fff;
+  transition: all .2s;
+}
+.scale input:checked + .dot {
+  background: var(--dot); border-color: var(--dot);
+  box-shadow: 0 0 0 4px rgba(232,120,42,.2);
+}
+.scale .lbl { font-size: .65rem; color: var(--text-muted); line-height: 1.2; }
+
+/* Freitext */
+.freitext { margin-bottom: 24px; }
+.freitext h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
+.freitext .hint { font-size: .78rem; color: var(--text-muted); margin-bottom: 8px; }
+.freitext textarea {
+  width: 100%; min-height: 100px; border: 2px solid #ddd; border-radius: var(--radius);
+  padding: 12px; font-size: .95rem; font-family: inherit; resize: vertical;
+  transition: border-color .2s;
+}
+.freitext textarea:focus { border-color: var(--primary); outline: none; }
+
+/* Button */
+.btn {
+  display: block; width: 100%; padding: 16px; border: none; border-radius: var(--radius);
+  font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all .2s;
+  color: #fff; background: var(--primary);
+}
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-accent { background: var(--accent); }
+
+/* Thank you */
+.thanks { text-align: center; padding: 60px 20px; }
+.thanks .check { font-size: 4rem; margin-bottom: 16px; }
+.thanks h2 { color: var(--primary); margin-bottom: 8px; }
+
+/* Results */
+.result-card {
+  background: var(--card); border-radius: var(--radius); padding: 20px;
+  margin-bottom: 16px; box-shadow: var(--shadow);
+}
+.result-card h3 { font-size: .95rem; color: var(--primary); margin-bottom: 12px; }
+.bar-row { display: flex; align-items: center; margin-bottom: 6px; gap: 8px; }
+.bar-label { font-size: .75rem; width: 80px; text-align: right; color: var(--text-muted); flex-shrink: 0; }
+.bar-track { flex: 1; height: 28px; background: #eee; border-radius: 14px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; background: var(--dot); border-radius: 14px; transition: width .5s ease; min-width: 2px; }
+.bar-count { font-size: .75rem; width: 30px; color: var(--text-muted); }
+.stat-total { text-align: center; font-size: 2.5rem; font-weight: 800; color: var(--primary); }
+.stat-label { text-align: center; color: var(--text-muted); font-size: .85rem; }
+.freitext-list { list-style: none; }
+.freitext-list li {
+  padding: 10px 14px; background: var(--bg); border-radius: 8px; margin-bottom: 6px;
+  font-size: .9rem; line-height: 1.4;
+}
+
+/* Admin */
+.admin-form { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.admin-form input {
+  flex: 1; min-width: 120px; padding: 10px 14px; border: 2px solid #ddd;
+  border-radius: var(--radius); font-size: .9rem;
+}
+.event-list { list-style: none; }
+.event-list li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 14px; background: var(--card); border-radius: var(--radius);
+  margin-bottom: 8px; box-shadow: var(--shadow);
+}
+.event-list a { color: var(--primary); font-weight: 600; text-decoration: none; }
+
+/* Footer */
+.footer {
+  text-align: center; padding: 16px; font-size: .7rem; color: var(--text-muted);
+  border-top: 1px solid #e0d8d0;
+}
+.footer a { color: var(--primary); }
+
+/* Nav */
+.nav { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+.nav a {
+  padding: 8px 16px; border-radius: 20px; background: var(--card);
+  color: var(--primary); text-decoration: none; font-size: .85rem; font-weight: 600;
+  box-shadow: var(--shadow);
+}
+.nav a.active { background: var(--primary); color: #fff; }
+
+/* Responsive */
+@media (max-width: 400px) {
+  .scale .dot { width: 36px; height: 36px; }
+  .scale .lbl { font-size: .58rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>GIB UNS FEEDBACK</h1>
+  <div class="subtitle">Nachhaltig Wirken · Platform Coops eG</div>
+</div>
+
+<div class="container" id="app"></div>
+
+<div class="footer">
+  <a href="https://platformcoop.de" target="_blank">Platform Coops eG</a> · Nachhaltig Wirken
+</div>
+
+<script>
+const app = document.getElementById('app');
+
+// Router
+function getRoute() {
+  const p = location.pathname;
+  if (p.startsWith('/event/')) return { view: 'feedback', slug: p.split('/')[2] };
+  if (p.startsWith('/results/')) return { view: 'results', slug: p.split('/')[2] };
+  if (p === '/admin') return { view: 'admin' };
+  return { view: 'home' };
+}
+
+function navigate(path) {
+  history.pushState(null, '', path);
+  render();
+}
+
+window.addEventListener('popstate', render);
+
+// Views
+function render() {
+  const route = getRoute();
+  switch (route.view) {
+    case 'feedback': renderFeedback(route.slug); break;
+    case 'results': renderResults(route.slug); break;
+    case 'admin': renderAdmin(); break;
+    default: renderHome();
+  }
+}
+
+function renderHome() {
+  app.innerHTML = `
+    <div style="text-align:center;padding:40px 0">
+      <div style="font-size:3rem;margin-bottom:16px">📊</div>
+      <h2 style="color:var(--primary);margin-bottom:8px">Wirkungsmessung</h2>
+      <p style="color:var(--text-muted);margin-bottom:32px">Digitales Feedback-Tool für Veranstaltungen</p>
+      <div class="nav">
+        <a href="/admin" onclick="event.preventDefault();navigate('/admin')">Events verwalten</a>
+        <a href="/event/default" onclick="event.preventDefault();navigate('/event/default')">Demo ausprobieren</a>
+      </div>
+    </div>
+  `;
+}
+
+function renderFeedback(slug) {
+  app.innerHTML = `
+    <div style="margin-top:8px">
+      <div class="freitext">
+        <h3>💬 Dein Feedback</h3>
+        <div class="hint">Diesen Impuls habe ich heute mitgenommen… / Diesen Gedanken möchte ich gerne noch da lassen…</div>
+        <textarea id="freitext" placeholder="Dein Kommentar (optional)…"></textarea>
+      </div>
+
+      <div class="question">
+        <h3>Wie hat dir der Rahmen der Veranstaltung gefallen?</h3>
+        <div class="hint">Gesprächs-/Workshopformat, Moderation, Setting, Veranstaltungsort</div>
+        <div class="scale" id="scale-rahmen">
+          ${scaleOptions('rahmen', [
+            {v:1,l:'sehr gut'},{v:2,l:'gut'},{v:3,l:'mittel'},{v:4,l:'schlecht'},{v:5,l:'sehr schlecht'}
+          ])}
+        </div>
+      </div>
+
+      <div class="question">
+        <h3>Wie relevant schätzt du die Inhalte für dich ein?</h3>
+        <div class="scale" id="scale-relevanz">
+          ${scaleOptions('relevanz', [
+            {v:1,l:'sehr relevant'},{v:2,l:'relevant'},{v:3,l:'wenig relevant'},{v:4,l:'nicht relevant'}
+          ])}
+        </div>
+      </div>
+
+      <div class="question">
+        <h3>Wie wahrscheinlich ist es, dass du das Thema weiter verfolgst?</h3>
+        <div class="scale" id="scale-weiterverfolgen">
+          ${scaleOptions('weiterverfolgen', [
+            {v:1,l:'sehr wahrscheinlich'},{v:2,l:'wahrscheinlich'},{v:3,l:'wenig wahrscheinlich'},{v:4,l:'sehr unwahrscheinlich'}
+          ])}
+        </div>
+      </div>
+
+      <button class="btn btn-accent" id="submit-btn" onclick="submitFeedback('${slug}')">Feedback absenden ✓</button>
+    </div>
+  `;
+
+  // Add haptic feedback on dot tap
+  document.querySelectorAll('.scale input').forEach(input => {
+    input.addEventListener('change', () => {
+      if (navigator.vibrate) navigator.vibrate(15);
+    });
+  });
+}
+
+function scaleOptions(name, opts) {
+  return opts.map(o => `
+    <label>
+      <input type="radio" name="${name}" value="${o.v}">
+      <span class="dot"></span>
+      <span class="lbl">${o.l}</span>
+    </label>
+  `).join('');
+}
+
+async function submitFeedback(slug) {
+  const btn = document.getElementById('submit-btn');
+  const rahmen = document.querySelector('input[name="rahmen"]:checked')?.value;
+  const relevanz = document.querySelector('input[name="relevanz"]:checked')?.value;
+  const weiterverfolgen = document.querySelector('input[name="weiterverfolgen"]:checked')?.value;
+  const freitext = document.getElementById('freitext').value.trim();
+
+  if (!rahmen || !relevanz || !weiterverfolgen) {
+    alert('Bitte beantworte alle drei Skala-Fragen.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Wird gesendet…';
+
+  try {
+    const res = await fetch(`/api/feedback/${slug}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        rahmen: +rahmen, relevanz: +relevanz,
+        weiterverfolgen: +weiterverfolgen, freitext
+      })
+    });
+    if (!res.ok) throw new Error('Fehler');
+
+    app.innerHTML = `
+      <div class="thanks">
+        <div class="check">✅</div>
+        <h2>Danke, dass du dabei warst!</h2>
+        <p style="color:var(--text-muted);margin-bottom:24px">Dein Feedback hilft uns, besser zu werden.</p>
+        <button class="btn" onclick="navigate('/results/${slug}')" style="max-width:280px;margin:0 auto">Ergebnisse ansehen →</button>
+      </div>
+    `;
+    if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = 'Feedback absenden ✓';
+    alert('Fehler beim Senden. Bitte erneut versuchen.');
+  }
+}
+
+function renderResults(slug) {
+  app.innerHTML = `
+    <div class="nav" style="margin-top:12px">
+      <a href="/event/${slug}" onclick="event.preventDefault();navigate('/event/${slug}')">Feedback geben</a>
+      <a href="/results/${slug}" class="active">Ergebnisse</a>
+    </div>
+    <div id="results-content"><p style="text-align:center;color:var(--text-muted)">Lade Ergebnisse…</p></div>
+  `;
+  loadResults(slug);
+
+  // SSE live updates
+  const es = new EventSource(`/api/stream/${slug}`);
+  es.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    renderResultsData(data, slug);
+  };
+}
+
+async function loadResults(slug) {
+  try {
+    const res = await fetch(`/api/results/${slug}`);
+    const data = await res.json();
+    renderResultsData(data, slug);
+  } catch (e) {
+    document.getElementById('results-content').innerHTML = '<p>Fehler beim Laden.</p>';
+  }
+}
+
+function renderResultsData(data, slug) {
+  const container = document.getElementById('results-content');
+  if (!container) return;
+
+  const rahmenLabels = ['sehr gut','gut','mittel','schlecht','sehr schlecht'];
+  const relevanzLabels = ['sehr relevant','relevant','wenig relevant','nicht relevant'];
+  const weiterLabels = ['sehr wahrscheinlich','wahrscheinlich','wenig wahrscheinlich','sehr unwahrscheinlich'];
+
+  container.innerHTML = `
+    <div class="result-card">
+      <div class="stat-total">${data.total}</div>
+      <div class="stat-label">Teilnehmende</div>
+    </div>
+    <div class="result-card">
+      <h3>Rahmen der Veranstaltung</h3>
+      ${barChart(data.rahmen, rahmenLabels, data.total, 5)}
+    </div>
+    <div class="result-card">
+      <h3>Relevanz der Inhalte</h3>
+      ${barChart(data.relevanz, relevanzLabels, data.total, 4)}
+    </div>
+    <div class="result-card">
+      <h3>Thema weiter verfolgen</h3>
+      ${barChart(data.weiterverfolgen, weiterLabels, data.total, 4)}
+    </div>
+    ${data.freitexte.length ? `
+    <div class="result-card">
+      <h3>💬 Kommentare</h3>
+      <ul class="freitext-list">
+        ${data.freitexte.map(t => `<li>${escHtml(t)}</li>`).join('')}
+      </ul>
+    </div>` : ''}
+    <a href="/api/export/${slug}" class="btn" style="text-decoration:none;text-align:center;margin-top:8px;display:block">CSV Export ↓</a>
+  `;
+}
+
+function barChart(values, labels, total, max) {
+  const map = {};
+  values.forEach(v => map[v.v] = v.c);
+  return Array.from({length: max}, (_, i) => {
+    const v = i + 1;
+    const count = map[v] || 0;
+    const pct = total ? (count / total * 100) : 0;
+    return `<div class="bar-row">
+      <span class="bar-label">${labels[i]}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <span class="bar-count">${count}</span>
+    </div>`;
+  }).join('');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderAdmin() {
+  app.innerHTML = `
+    <h2 style="color:var(--primary);margin:16px 0">Events verwalten</h2>
+    <div class="admin-form">
+      <input id="ev-name" placeholder="Event-Name">
+      <input id="ev-slug" placeholder="URL-Slug (z.B. workshop-2026)">
+      <button class="btn" style="flex:0 0 auto;width:auto;padding:10px 20px" onclick="createEvent()">Erstellen</button>
+    </div>
+    <ul class="event-list" id="event-list"></ul>
+  `;
+  loadEvents();
+}
+
+async function loadEvents() {
+  const res = await fetch('/api/events');
+  const events = await res.json();
+  document.getElementById('event-list').innerHTML = events.map(e => `
+    <li>
+      <div>
+        <a href="/event/${e.slug}" onclick="event.preventDefault();navigate('/event/${e.slug}')">${escHtml(e.name)}</a>
+        <div style="font-size:.75rem;color:var(--text-muted)">/${e.slug}</div>
+      </div>
+      <a href="/results/${e.slug}" onclick="event.preventDefault();navigate('/results/${e.slug}')" style="font-size:.85rem">Ergebnisse →</a>
+    </li>
+  `).join('');
+}
+
+async function createEvent() {
+  const name = document.getElementById('ev-name').value.trim();
+  const slug = document.getElementById('ev-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
+  if (!name || !slug) return alert('Name und Slug benötigt');
+  const res = await fetch('/api/events', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, slug })
+  });
+  if (res.ok) {
+    document.getElementById('ev-name').value = '';
+    document.getElementById('ev-slug').value = '';
+    loadEvents();
+  } else {
+    const err = await res.json();
+    alert(err.error);
+  }
+}
+
+// PWA
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js');
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
