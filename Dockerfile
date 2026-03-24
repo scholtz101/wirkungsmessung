@@ -3,5 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY . .
-EXPOSE 18791
+RUN mkdir -p /data
+ENV PORT=80
+EXPOSE 80
 CMD ["node", "server.js"]

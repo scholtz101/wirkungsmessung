@@ -7,8 +7,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 18791;
 
-// Database
-const db = new Database(join(__dirname, 'data.db'));
+// Database — use /data for persistent volume in Docker, fallback to local
+const dbPath = process.env.DB_PATH || (process.env.PORT ? '/data/data.db' : join(__dirname, 'data.db'));
+const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
 
 db.exec(`
@@ -116,10 +117,13 @@ app.get('/api/events', (req, res) => {
 // API: Export CSV
 app.get('/api/export/:slug', (req, res) => {
   const { slug } = req.params;
+  const exportLang = req.query.lang === 'en' ? 'en' : 'de';
   const event = db.prepare('SELECT id, name FROM events WHERE slug = ?').get(slug);
   if (!event) return res.status(404).json({ error: 'Event nicht gefunden' });
   const rows = db.prepare('SELECT username, rahmen, relevanz, weiterverfolgen, freitext, created_at FROM responses WHERE event_id = ? ORDER BY created_at').all(event.id);
-  const header = 'Name,Rahmen,Relevanz,Weiterverfolgen,Freitext,Zeitpunkt\n';
+  const header = exportLang === 'en'
+    ? 'Name,Format,Relevance,Continue Pursuing,Comments,Timestamp\n'
+    : 'Name,Rahmen,Relevanz,Weiterverfolgen,Freitext,Zeitpunkt\n';
   const csv = rows.map(r => `"${(r.username||'').replace(/"/g,'""')}",${r.rahmen},${r.relevanz},${r.weiterverfolgen},"${(r.freitext||'').replace(/"/g,'""')}",${r.created_at}`).join('\n');
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', `attachment; filename="wirkungsmessung-${slug}.csv"`);

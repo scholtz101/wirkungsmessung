@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Wirkungsmessung – Nachhaltig Wirken</title>
-<link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2d3a8c">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <style>
 :root {
   --primary: #2d3a8c;
@@ -27,13 +27,11 @@ body {
 }
 .header {
   background: var(--primary); color: #fff; padding: 20px 16px;
-  text-align: center;
+  text-align: center; position: relative;
 }
 .header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: .02em; }
 .header .subtitle { font-size: .85rem; opacity: .85; margin-top: 4px; }
 .container { flex: 1; max-width: 600px; width: 100%; margin: 0 auto; padding: 16px; }
-
-/* Name input */
 .name-field { margin-bottom: 24px; }
 .name-field label { display: block; font-size: 1rem; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
 .name-field input {
@@ -41,12 +39,9 @@ body {
   font-size: 1rem; font-family: inherit; transition: border-color .2s;
 }
 .name-field input:focus { border-color: var(--primary); outline: none; }
-
-/* Slider question */
 .question { margin-bottom: 32px; }
 .question h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
 .question .hint { font-size: .78rem; color: var(--text-muted); margin-bottom: 14px; }
-
 .slider-wrap { position: relative; padding: 0 4px; }
 .slider-labels {
   display: flex; justify-content: space-between; margin-bottom: 8px;
@@ -55,12 +50,7 @@ body {
 .slider-labels span { text-align: center; width: 20%; }
 .slider-labels span:first-child { text-align: left; }
 .slider-labels span:last-child { text-align: right; }
-
-.slider-track {
-  position: relative; width: 100%; height: 48px;
-  display: flex; align-items: center;
-}
-
+.slider-track { position: relative; width: 100%; height: 48px; display: flex; align-items: center; }
 input[type="range"] {
   -webkit-appearance: none; appearance: none;
   width: 100%; height: 8px; border-radius: 4px;
@@ -71,35 +61,27 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
   width: 36px; height: 36px; border-radius: 50%;
   background: #fff; border: 4px solid var(--primary);
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
-  cursor: grab;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2); cursor: grab;
 }
 input[type="range"]::-moz-range-thumb {
   width: 36px; height: 36px; border-radius: 50%;
   background: #fff; border: 4px solid var(--primary);
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
-  cursor: grab; border: 4px solid var(--primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2); cursor: grab;
 }
 input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; transform: scale(1.1); }
-
 .slider-value {
   text-align: center; font-size: .85rem; font-weight: 600;
   color: var(--primary); margin-top: 6px; min-height: 1.3em;
 }
 .slider-unset .slider-value { color: var(--text-muted); font-style: italic; }
-
-/* Freitext */
 .freitext { margin-bottom: 24px; }
 .freitext h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
 .freitext .hint { font-size: .78rem; color: var(--text-muted); margin-bottom: 8px; }
 .freitext textarea {
   width: 100%; min-height: 100px; border: 2px solid #ddd; border-radius: var(--radius);
-  padding: 12px; font-size: .95rem; font-family: inherit; resize: vertical;
-  transition: border-color .2s;
+  padding: 12px; font-size: .95rem; font-family: inherit; resize: vertical; transition: border-color .2s;
 }
 .freitext textarea:focus { border-color: var(--primary); outline: none; }
-
-/* Button */
 .btn {
   display: block; width: 100%; padding: 16px; border: none; border-radius: var(--radius);
   font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all .2s;
@@ -108,13 +90,9 @@ input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; transform: 
 .btn:active { transform: scale(.98); }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 .btn-accent { background: var(--accent); }
-
-/* Thank you */
 .thanks { text-align: center; padding: 60px 20px; }
 .thanks .check { font-size: 4rem; margin-bottom: 16px; }
 .thanks h2 { color: var(--primary); margin-bottom: 8px; }
-
-/* Results */
 .result-card {
   background: var(--card); border-radius: var(--radius); padding: 20px;
   margin-bottom: 16px; box-shadow: var(--shadow);
@@ -122,7 +100,7 @@ input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; transform: 
 .result-card h3 { font-size: .95rem; color: var(--primary); margin-bottom: 12px; }
 .bar-row { display: flex; align-items: center; margin-bottom: 6px; gap: 8px; }
 .bar-label { font-size: .72rem; width: 100px; text-align: right; color: var(--text-muted); flex-shrink: 0; }
-.bar-track { flex: 1; height: 28px; background: #eee; border-radius: 14px; overflow: hidden; position: relative; }
+.bar-track { flex: 1; height: 28px; background: #eee; border-radius: 14px; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 14px; transition: width .5s ease; min-width: 2px; }
 .bar-count { font-size: .75rem; width: 30px; color: var(--text-muted); }
 .stat-total { text-align: center; font-size: 2.5rem; font-weight: 800; color: var(--primary); }
@@ -132,8 +110,6 @@ input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; transform: 
   padding: 10px 14px; background: var(--bg); border-radius: 8px; margin-bottom: 6px;
   font-size: .9rem; line-height: 1.4;
 }
-
-/* Admin */
 .admin-form { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 .admin-form input {
   flex: 1; min-width: 120px; padding: 10px 14px; border: 2px solid #ddd;
@@ -146,15 +122,11 @@ input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; transform: 
   margin-bottom: 8px; box-shadow: var(--shadow);
 }
 .event-list a { color: var(--primary); font-weight: 600; text-decoration: none; }
-
-/* Footer */
 .footer {
   text-align: center; padding: 16px; font-size: .7rem; color: var(--text-muted);
   border-top: 1px solid #e0d8d0;
 }
 .footer a { color: var(--primary); }
-
-/* Nav */
 .nav { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
 .nav a {
   padding: 8px 16px; border-radius: 20px; background: var(--card);
@@ -162,7 +134,18 @@ input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; transform: 
   box-shadow: var(--shadow);
 }
 .nav a.active { background: var(--primary); color: #fff; }
-
+.lang-switch {
+  position: absolute; right: 12px; top: 12px;
+  display: flex; gap: 4px;
+}
+.lang-switch button {
+  padding: 3px 8px; border: 2px solid rgba(255,255,255,.4); border-radius: 6px;
+  background: transparent; color: rgba(255,255,255,.7); font-size: .7rem;
+  font-weight: 700; cursor: pointer; transition: all .2s;
+}
+.lang-switch button.active {
+  background: rgba(255,255,255,.2); border-color: #fff; color: #fff;
+}
 @media (max-width: 400px) {
   .slider-labels { font-size: .6rem; }
   input[type="range"]::-webkit-slider-thumb { width: 30px; height: 30px; }
@@ -172,33 +155,160 @@ input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; transform: 
 <body>
 
 <div class="header">
-  <h1>GIB UNS FEEDBACK</h1>
-  <div class="subtitle">Nachhaltig Wirken · Platform Coops eG</div>
+  <div class="lang-switch" id="lang-switch"></div>
+  <h1 id="header-title">GIB UNS FEEDBACK</h1>
+  <div class="subtitle" id="header-subtitle">Nachhaltig Wirken · Platform Coops eG</div>
 </div>
 
 <div class="container" id="app"></div>
 
 <div class="footer">
-  <a href="https://platformcoop.de" target="_blank">Platform Coops eG</a> · Nachhaltig Wirken
+  <a href="https://platformcoop.de" target="_blank">Platform Coops eG</a> · <span id="footer-text">Nachhaltig Wirken</span>
 </div>
 
 <script>
 const app = document.getElementById('app');
-const LABELS_5 = ['überhaupt nicht', 'eher nicht', 'weiß nicht', 'eher ja', 'ja, sehr'];
 const COLORS_5 = ['#d32f2f', '#f57c00', '#fbc02d', '#7cb342', '#388e3c'];
-
-// Track which sliders the user has touched
 const touched = { rahmen: false, relevanz: false, weiterverfolgen: false };
+
+const translations = {
+  de: {
+    title: 'Wirkungsmessung – Nachhaltig Wirken',
+    headerTitle: 'GIB UNS FEEDBACK',
+    headerSubtitle: 'Nachhaltig Wirken · Platform Coops eG',
+    footerText: 'Nachhaltig Wirken',
+    labels5: ['überhaupt nicht', 'eher nicht', 'weiß nicht', 'eher ja', 'ja, sehr'],
+    homeTitle: 'Wirkungsmessung',
+    homeDesc: 'Digitales Feedback-Tool für Veranstaltungen',
+    manageEvents: 'Events verwalten',
+    tryDemo: 'Demo ausprobieren',
+    yourName: '👤 Dein Name',
+    namePlaceholder: 'Vorname Nachname',
+    pleaseRate: '← bitte bewerten →',
+    qRahmen: 'Wie hat dir der Rahmen der Veranstaltung gefallen?',
+    hRahmen: 'Gesprächs-/Workshopformat, Moderation, Setting, Veranstaltungsort',
+    qRelevanz: 'Wie relevant schätzt du die Inhalte für dich ein?',
+    qWeiterverfolgen: 'Wie wahrscheinlich ist es, dass du das Thema weiter verfolgst?',
+    yourFeedback: '💬 Dein Feedback',
+    feedbackHint: 'Diesen Impuls habe ich heute mitgenommen… / Diesen Gedanken möchte ich gerne noch da lassen…',
+    commentPlaceholder: 'Dein Kommentar (optional)…',
+    submitBtn: 'Feedback absenden ✓',
+    nameRequired: 'Bitte gib deinen Namen ein.',
+    slidersRequired: 'Bitte bewege alle drei Schieberegler.',
+    sending: 'Wird gesendet…',
+    thanks: 'Danke',
+    thanksMsg: 'Dein Feedback hilft uns, besser zu werden.',
+    viewResults: 'Ergebnisse ansehen →',
+    sendError: 'Fehler beim Senden.',
+    giveFeedback: 'Feedback geben',
+    results: 'Ergebnisse',
+    loading: 'Lade Ergebnisse…',
+    loadError: 'Fehler beim Laden.',
+    participants: 'Teilnehmende',
+    rahmenTitle: 'Rahmen der Veranstaltung',
+    relevanzTitle: 'Relevanz der Inhalte',
+    weiterverfolgenTitle: 'Thema weiter verfolgen',
+    comments: '💬 Kommentare',
+    csvExport: 'CSV Export ↓',
+    adminTitle: 'Events verwalten',
+    eventNamePlaceholder: 'Event-Name',
+    slugPlaceholder: 'URL-Slug (z.B. workshop-2026)',
+    create: 'Erstellen',
+    resultsLink: 'Ergebnisse →',
+    nameSlugRequired: 'Name und Slug benötigt',
+  },
+  en: {
+    title: 'Impact Measurement – Sustainable Impact',
+    headerTitle: 'GIVE US FEEDBACK',
+    headerSubtitle: 'Sustainable Impact · Platform Coops eG',
+    footerText: 'Sustainable Impact',
+    labels5: ['not at all', 'rather not', 'undecided', 'rather yes', 'yes, very much'],
+    homeTitle: 'Impact Measurement',
+    homeDesc: 'Digital feedback tool for events',
+    manageEvents: 'Manage Events',
+    tryDemo: 'Try Demo',
+    yourName: '👤 Your Name',
+    namePlaceholder: 'First Last',
+    pleaseRate: '← please rate →',
+    qRahmen: 'How did you like the format of the event?',
+    hRahmen: 'Discussion/workshop format, moderation, setting, venue',
+    qRelevanz: 'How relevant do you find the content for you?',
+    qWeiterverfolgen: 'How likely are you to continue pursuing this topic?',
+    yourFeedback: '💬 Your Feedback',
+    feedbackHint: 'This impulse I took away today… / This thought I would like to leave here…',
+    commentPlaceholder: 'Your comment (optional)…',
+    submitBtn: 'Submit Feedback ✓',
+    nameRequired: 'Please enter your name.',
+    slidersRequired: 'Please move all three sliders.',
+    sending: 'Sending…',
+    thanks: 'Thank you',
+    thanksMsg: 'Your feedback helps us improve.',
+    viewResults: 'View Results →',
+    sendError: 'Error while sending.',
+    giveFeedback: 'Give Feedback',
+    results: 'Results',
+    loading: 'Loading results…',
+    loadError: 'Error loading.',
+    participants: 'Participants',
+    rahmenTitle: 'Event Format',
+    relevanzTitle: 'Content Relevance',
+    weiterverfolgenTitle: 'Continue Pursuing Topic',
+    comments: '💬 Comments',
+    csvExport: 'CSV Export ↓',
+    adminTitle: 'Manage Events',
+    eventNamePlaceholder: 'Event Name',
+    slugPlaceholder: 'URL slug (e.g. workshop-2026)',
+    create: 'Create',
+    resultsLink: 'Results →',
+    nameSlugRequired: 'Name and slug required',
+  }
+};
+
+let lang = localStorage.getItem('wm-lang') || (navigator.language.startsWith('de') ? 'de' : 'en');
+function t(key) { return (translations[lang] || translations.de)[key] || translations.de[key] || key; }
+
+function setLang(l) { lang = l; localStorage.setItem('wm-lang', l); updateHeader(); render(); }
+
+function updateHeader() {
+  document.title = t('title');
+  document.documentElement.lang = lang;
+  document.getElementById('header-title').textContent = t('headerTitle');
+  document.getElementById('header-subtitle').textContent = t('headerSubtitle');
+  document.getElementById('footer-text').textContent = t('footerText');
+  const sw = document.getElementById('lang-switch');
+  sw.innerHTML = ['de','en'].map(l =>
+    `<button class="${l===lang?'active':''}" onclick="setLang('${l}')">${l.toUpperCase()}</button>`
+  ).join('');
+}
+
+// Auto-detect base path from current URL
+// Works with /apps/wirkungsmessung/ or / (direct)
+const BASE = (() => {
+  const p = location.pathname;
+  // If path contains /event/ /results/ /admin, strip that part
+  const m = p.match(/^(.*?)\/(event|results|admin)(\/|$)/);
+  if (m) return m[1] || '';
+  // If path ends with / and is not just /, use it as base (strip trailing /)
+  if (p !== '/' && p.endsWith('/')) return p.slice(0, -1);
+  if (p === '/') return '';
+  return p;
+})();
+
+function apiUrl(path) { return BASE + path; }
+function navUrl(path) { return BASE + path; }
 
 function getRoute() {
   const p = location.pathname;
-  if (p.startsWith('/event/')) return { view: 'feedback', slug: p.split('/')[2] };
-  if (p.startsWith('/results/')) return { view: 'results', slug: p.split('/')[2] };
-  if (p === '/admin') return { view: 'admin' };
+  // Match /event/:slug or /apps/wirkungsmessung/event/:slug
+  const eventMatch = p.match(/\/event\/([^/]+)/);
+  if (eventMatch) return { view: 'feedback', slug: eventMatch[1] };
+  const resultMatch = p.match(/\/results\/([^/]+)/);
+  if (resultMatch) return { view: 'results', slug: resultMatch[1] };
+  if (p.endsWith('/admin')) return { view: 'admin' };
   return { view: 'home' };
 }
 
-function navigate(path) { history.pushState(null, '', path); render(); }
+function navigate(path) { history.pushState(null, '', navUrl(path)); render(); }
 window.addEventListener('popstate', render);
 
 function render() {
@@ -216,72 +326,59 @@ function renderHome() {
   app.innerHTML = `
     <div style="text-align:center;padding:40px 0">
       <div style="font-size:3rem;margin-bottom:16px">📊</div>
-      <h2 style="color:var(--primary);margin-bottom:8px">Wirkungsmessung</h2>
-      <p style="color:var(--text-muted);margin-bottom:32px">Digitales Feedback-Tool für Veranstaltungen</p>
+      <h2 style="color:var(--primary);margin-bottom:8px">${t('homeTitle')}</h2>
+      <p style="color:var(--text-muted);margin-bottom:32px">${t('homeDesc')}</p>
       <div class="nav">
-        <a href="/admin" onclick="event.preventDefault();navigate('/admin')">Events verwalten</a>
-        <a href="/event/default" onclick="event.preventDefault();navigate('/event/default')">Demo ausprobieren</a>
+        <a href="${navUrl('/admin')}" onclick="event.preventDefault();navigate('/admin')">${t('manageEvents')}</a>
+        <a href="${navUrl('/event/default')}" onclick="event.preventDefault();navigate('/event/default')">${t('tryDemo')}</a>
       </div>
     </div>`;
 }
 
-function sliderHtml(name, question, hint) {
+function sliderHtml(name, questionKey, hintKey) {
+  const labels = t('labels5');
   return `
     <div class="question">
-      <h3>${question}</h3>
-      ${hint ? `<div class="hint">${hint}</div>` : ''}
+      <h3>${t(questionKey)}</h3>
+      ${hintKey ? `<div class="hint">${t(hintKey)}</div>` : ''}
       <div class="slider-wrap slider-unset" id="wrap-${name}">
         <div class="slider-labels">
-          ${LABELS_5.map(l => `<span>${l}</span>`).join('')}
+          ${labels.map(l => `<span>${l}</span>`).join('')}
         </div>
         <div class="slider-track">
           <input type="range" min="1" max="5" value="3" step="1" id="slider-${name}"
                  oninput="onSlide('${name}', this.value)">
         </div>
-        <div class="slider-value" id="val-${name}">← bitte bewerten →</div>
+        <div class="slider-value" id="val-${name}">${t('pleaseRate')}</div>
       </div>
     </div>`;
 }
 
 function onSlide(name, val) {
   touched[name] = true;
-  const wrap = document.getElementById('wrap-' + name);
-  wrap.classList.remove('slider-unset');
-  document.getElementById('val-' + name).textContent = LABELS_5[val - 1];
+  document.getElementById('wrap-' + name).classList.remove('slider-unset');
+  document.getElementById('val-' + name).textContent = t('labels5')[val - 1];
   document.getElementById('val-' + name).style.color = COLORS_5[val - 1];
   if (navigator.vibrate) navigator.vibrate(10);
 }
 
 function renderFeedback(slug) {
-  // Restore name from localStorage
   const savedName = localStorage.getItem('wm-username') || '';
-
   app.innerHTML = `
     <div style="margin-top:12px">
       <div class="name-field">
-        <label for="username">👤 Dein Name</label>
-        <input type="text" id="username" placeholder="Vorname Nachname" value="${escHtml(savedName)}" autocomplete="name">
+        <label for="username">${t('yourName')}</label>
+        <input type="text" id="username" placeholder="${t('namePlaceholder')}" value="${escHtml(savedName)}" autocomplete="off">
       </div>
-
-      ${sliderHtml('rahmen',
-        'Wie hat dir der Rahmen der Veranstaltung gefallen?',
-        'Gesprächs-/Workshopformat, Moderation, Setting, Veranstaltungsort')}
-
-      ${sliderHtml('relevanz',
-        'Wie relevant schätzt du die Inhalte für dich ein?',
-        '')}
-
-      ${sliderHtml('weiterverfolgen',
-        'Wie wahrscheinlich ist es, dass du das Thema weiter verfolgst?',
-        '')}
-
+      ${sliderHtml('rahmen', 'qRahmen', 'hRahmen')}
+      ${sliderHtml('relevanz', 'qRelevanz', '')}
+      ${sliderHtml('weiterverfolgen', 'qWeiterverfolgen', '')}
       <div class="freitext">
-        <h3>💬 Dein Feedback</h3>
-        <div class="hint">Diesen Impuls habe ich heute mitgenommen… / Diesen Gedanken möchte ich gerne noch da lassen…</div>
-        <textarea id="freitext" placeholder="Dein Kommentar (optional)…"></textarea>
+        <h3>${t('yourFeedback')}</h3>
+        <div class="hint">${t('feedbackHint')}</div>
+        <textarea id="freitext" placeholder="${t('commentPlaceholder')}"></textarea>
       </div>
-
-      <button class="btn btn-accent" id="submit-btn" onclick="submitFeedback('${slug}')">Feedback absenden ✓</button>
+      <button type="button" class="btn btn-accent" id="submit-btn" onclick="submitFeedback('${slug}')">${t('submitBtn')}</button>
     </div>`;
 }
 
@@ -289,104 +386,88 @@ async function submitFeedback(slug) {
   const btn = document.getElementById('submit-btn');
   const username = document.getElementById('username').value.trim();
   const freitext = document.getElementById('freitext').value.trim();
-
-  if (!username) { alert('Bitte gib deinen Namen ein.'); document.getElementById('username').focus(); return; }
+  if (!username) { alert(t('nameRequired')); document.getElementById('username').focus(); return; }
   if (!touched.rahmen || !touched.relevanz || !touched.weiterverfolgen) {
-    alert('Bitte bewege alle drei Schieberegler.');
-    return;
+    alert(t('slidersRequired')); return;
   }
-
   const rahmen = +document.getElementById('slider-rahmen').value;
   const relevanz = +document.getElementById('slider-relevanz').value;
   const weiterverfolgen = +document.getElementById('slider-weiterverfolgen').value;
-
-  // Save name for next time
   localStorage.setItem('wm-username', username);
-
-  btn.disabled = true;
-  btn.textContent = 'Wird gesendet…';
-
+  btn.disabled = true; btn.textContent = t('sending');
   try {
-    const res = await fetch(`/api/feedback/${slug}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch(apiUrl(`/api/feedback/${slug}`), {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, rahmen, relevanz, weiterverfolgen, freitext })
     });
     if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
-
     app.innerHTML = `
       <div class="thanks">
         <div class="check">✅</div>
-        <h2>Danke, ${escHtml(username)}!</h2>
-        <p style="color:var(--text-muted);margin-bottom:24px">Dein Feedback hilft uns, besser zu werden.</p>
-        <button class="btn" onclick="navigate('/results/${slug}')" style="max-width:280px;margin:0 auto">Ergebnisse ansehen →</button>
+        <h2>${t('thanks')}, ${escHtml(username)}!</h2>
+        <p style="color:var(--text-muted);margin-bottom:24px">${t('thanksMsg')}</p>
+        <button type="button" class="btn" onclick="navigate('/results/${slug}')" style="max-width:280px;margin:0 auto">${t('viewResults')}</button>
       </div>`;
     if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
   } catch (e) {
-    btn.disabled = false;
-    btn.textContent = 'Feedback absenden ✓';
-    alert(e.message || 'Fehler beim Senden.');
+    btn.disabled = false; btn.textContent = t('submitBtn');
+    alert(e.message || t('sendError'));
   }
 }
 
 function renderResults(slug) {
   app.innerHTML = `
     <div class="nav" style="margin-top:12px">
-      <a href="/event/${slug}" onclick="event.preventDefault();navigate('/event/${slug}')">Feedback geben</a>
-      <a href="/results/${slug}" class="active">Ergebnisse</a>
+      <a href="${navUrl('/event/'+slug)}" onclick="event.preventDefault();navigate('/event/${slug}')">${t('giveFeedback')}</a>
+      <a href="${navUrl('/results/'+slug)}" class="active">${t('results')}</a>
     </div>
-    <div id="results-content"><p style="text-align:center;color:var(--text-muted)">Lade Ergebnisse…</p></div>`;
+    <div id="results-content"><p style="text-align:center;color:var(--text-muted)">${t('loading')}</p></div>`;
   loadResults(slug);
-  const es = new EventSource(`/api/stream/${slug}`);
+  const es = new EventSource(apiUrl(`/api/stream/${slug}`));
   es.onmessage = (e) => renderResultsData(JSON.parse(e.data), slug);
 }
 
 async function loadResults(slug) {
   try {
-    const res = await fetch(`/api/results/${slug}`);
+    const res = await fetch(apiUrl(`/api/results/${slug}`));
     renderResultsData(await res.json(), slug);
   } catch (e) {
-    document.getElementById('results-content').innerHTML = '<p>Fehler beim Laden.</p>';
+    document.getElementById('results-content').innerHTML = '<p>' + t('loadError') + '</p>';
   }
 }
 
 function renderResultsData(data, slug) {
   const container = document.getElementById('results-content');
   if (!container) return;
-
   container.innerHTML = `
     <div class="result-card">
       <div class="stat-total">${data.total}</div>
-      <div class="stat-label">Teilnehmende</div>
+      <div class="stat-label">${t('participants')}</div>
     </div>
     <div class="result-card">
-      <h3>Rahmen der Veranstaltung</h3>
-      ${barChart(data.rahmen, LABELS_5, COLORS_5, data.total, 5)}
+      <h3>${t('rahmenTitle')}</h3>
+      ${barChart(data.rahmen, t('labels5'), COLORS_5, data.total, 5)}
     </div>
     <div class="result-card">
-      <h3>Relevanz der Inhalte</h3>
-      ${barChart(data.relevanz, LABELS_5, COLORS_5, data.total, 5)}
+      <h3>${t('relevanzTitle')}</h3>
+      ${barChart(data.relevanz, t('labels5'), COLORS_5, data.total, 5)}
     </div>
     <div class="result-card">
-      <h3>Thema weiter verfolgen</h3>
-      ${barChart(data.weiterverfolgen, LABELS_5, COLORS_5, data.total, 5)}
+      <h3>${t('weiterverfolgenTitle')}</h3>
+      ${barChart(data.weiterverfolgen, t('labels5'), COLORS_5, data.total, 5)}
     </div>
     ${data.freitexte.length ? `
     <div class="result-card">
-      <h3>💬 Kommentare</h3>
-      <ul class="freitext-list">
-        ${data.freitexte.map(t => `<li>${escHtml(t)}</li>`).join('')}
-      </ul>
+      <h3>${t('comments')}</h3>
+      <ul class="freitext-list">${data.freitexte.map(txt => `<li>${escHtml(txt)}</li>`).join('')}</ul>
     </div>` : ''}
-    <a href="/api/export/${slug}" class="btn" style="text-decoration:none;text-align:center;margin-top:8px;display:block">CSV Export ↓</a>`;
+    <a href="${apiUrl('/api/export/'+slug)}?lang=${lang}" class="btn" style="text-decoration:none;text-align:center;margin-top:8px;display:block">${t('csvExport')}</a>`;
 }
 
 function barChart(values, labels, colors, total, max) {
-  const map = {};
-  values.forEach(v => map[v.v] = v.c);
+  const map = {}; values.forEach(v => map[v.v] = v.c);
   return Array.from({length: max}, (_, i) => {
-    const v = i + 1, count = map[v] || 0;
-    const pct = total ? (count / total * 100) : 0;
+    const v = i + 1, count = map[v] || 0, pct = total ? (count / total * 100) : 0;
     return `<div class="bar-row">
       <span class="bar-label">${labels[i]}</span>
       <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${colors[i]}"></div></div>
@@ -399,34 +480,34 @@ function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replac
 
 function renderAdmin() {
   app.innerHTML = `
-    <h2 style="color:var(--primary);margin:16px 0">Events verwalten</h2>
+    <h2 style="color:var(--primary);margin:16px 0">${t('adminTitle')}</h2>
     <div class="admin-form">
-      <input id="ev-name" placeholder="Event-Name">
-      <input id="ev-slug" placeholder="URL-Slug (z.B. workshop-2026)">
-      <button class="btn" style="flex:0 0 auto;width:auto;padding:10px 20px" onclick="createEvent()">Erstellen</button>
+      <input id="ev-name" placeholder="${t('eventNamePlaceholder')}">
+      <input id="ev-slug" placeholder="${t('slugPlaceholder')}">
+      <button type="button" class="btn" style="flex:0 0 auto;width:auto;padding:10px 20px" onclick="createEvent()">${t('create')}</button>
     </div>
     <ul class="event-list" id="event-list"></ul>`;
   loadEvents();
 }
 
 async function loadEvents() {
-  const res = await fetch('/api/events');
+  const res = await fetch(apiUrl('/api/events'));
   const events = await res.json();
   document.getElementById('event-list').innerHTML = events.map(e => `
     <li>
       <div>
-        <a href="/event/${e.slug}" onclick="event.preventDefault();navigate('/event/${e.slug}')">${escHtml(e.name)}</a>
-        <div style="font-size:.75rem;color:var(--text-muted)">/${e.slug}</div>
+        <a href="${navUrl('/event/'+e.slug)}" onclick="event.preventDefault();navigate('/event/${e.slug}')">${escHtml(e.name)}</a>
+        <div style="font-size:.75rem;color:var(--text-muted)">/event/${e.slug}</div>
       </div>
-      <a href="/results/${e.slug}" onclick="event.preventDefault();navigate('/results/${e.slug}')" style="font-size:.85rem">Ergebnisse →</a>
+      <a href="${navUrl('/results/'+e.slug)}" onclick="event.preventDefault();navigate('/results/${e.slug}')" style="font-size:.85rem">${t('resultsLink')}</a>
     </li>`).join('');
 }
 
 async function createEvent() {
   const name = document.getElementById('ev-name').value.trim();
   const slug = document.getElementById('ev-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
-  if (!name || !slug) return alert('Name und Slug benötigt');
-  const res = await fetch('/api/events', {
+  if (!name || !slug) return alert(t('nameSlugRequired'));
+  const res = await fetch(apiUrl('/api/events'), {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, slug })
   });
@@ -434,7 +515,8 @@ async function createEvent() {
   else { const err = await res.json(); alert(err.error); }
 }
 
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
+// No service worker registration to avoid caching issues with subpath deployment
+updateHeader();
 render();
 </script>
 </body>
