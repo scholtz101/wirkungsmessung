@@ -484,7 +484,7 @@ function renderAdmin() {
     <div class="admin-form">
       <input id="ev-name" placeholder="${t('eventNamePlaceholder')}">
       <input id="ev-slug" placeholder="${t('slugPlaceholder')}">
-      <button type="button" class="btn" style="flex:0 0 auto;width:auto;padding:10px 20px" onclick="createEvent()">${t('create')}</button>
+      <button type="button" class="btn" style="flex:0 0 auto;width:auto;padding:10px 20px" onclick="addEvent()">${t('create')}</button>
     </div>
     <ul class="event-list" id="event-list"></ul>`;
   loadEvents();
@@ -503,7 +503,7 @@ async function loadEvents() {
     </li>`).join('');
 }
 
-async function createEvent() {
+async function addEvent() {
   const name = document.getElementById('ev-name').value.trim();
   const slug = document.getElementById('ev-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
   if (!name || !slug) return alert(t('nameSlugRequired'));
