@@ -117,10 +117,21 @@ input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; transform: 
 }
 .event-list { list-style: none; }
 .event-list li {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 14px; background: var(--card); border-radius: var(--radius);
-  margin-bottom: 8px; box-shadow: var(--shadow);
+  background: var(--card); border-radius: var(--radius);
+  padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow);
 }
+.event-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.event-header a { color: var(--primary); font-weight: 700; text-decoration: none; font-size: 1rem; }
+.event-meta { font-size: .75rem; color: var(--text-muted); margin-bottom: 8px; }
+.event-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.event-actions button, .event-actions a {
+  padding: 6px 12px; border-radius: 8px; font-size: .75rem; font-weight: 600;
+  cursor: pointer; text-decoration: none; border: none; transition: all .2s;
+}
+.btn-sm { background: var(--primary); color: #fff; }
+.btn-sm-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+.btn-sm-danger { background: #d32f2f; color: #fff; }
+.btn-copy-ok { background: #388e3c !important; color: #fff !important; }
 .event-list a { color: var(--primary); font-weight: 600; text-decoration: none; }
 .footer {
   text-align: center; padding: 16px; font-size: .7rem; color: var(--text-muted);
@@ -214,8 +225,15 @@ const translations = {
     eventNamePlaceholder: 'Event-Name',
     slugPlaceholder: 'URL-Slug (z.B. workshop-2026)',
     create: 'Erstellen',
-    resultsLink: 'Ergebnisse →',
+    resultsLink: 'Ergebnisse',
     nameSlugRequired: 'Name und Slug benötigt',
+    copyLink: 'Link kopieren',
+    copied: 'Kopiert!',
+    deleteEvent: 'Löschen',
+    confirmDelete: 'Event und alle Antworten löschen?',
+    responses: 'Antworten',
+    noEvents: 'Noch keine Events angelegt.',
+    newEvent: 'Neues Event anlegen',
   },
   en: {
     title: 'Impact Measurement – Sustainable Impact',
@@ -259,8 +277,15 @@ const translations = {
     eventNamePlaceholder: 'Event Name',
     slugPlaceholder: 'URL slug (e.g. workshop-2026)',
     create: 'Create',
-    resultsLink: 'Results →',
+    resultsLink: 'Results',
     nameSlugRequired: 'Name and slug required',
+    copyLink: 'Copy Link',
+    copied: 'Copied!',
+    deleteEvent: 'Delete',
+    confirmDelete: 'Delete event and all responses?',
+    responses: 'responses',
+    noEvents: 'No events created yet.',
+    newEvent: 'Create new event',
   }
 };
 
@@ -481,26 +506,55 @@ function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replac
 function renderAdmin() {
   app.innerHTML = `
     <h2 style="color:var(--primary);margin:16px 0">${t('adminTitle')}</h2>
+    <div id="event-list-wrap"></div>
+    <h3 style="color:var(--primary);margin:24px 0 8px">${t('newEvent')}</h3>
     <div class="admin-form">
       <input id="ev-name" placeholder="${t('eventNamePlaceholder')}">
       <input id="ev-slug" placeholder="${t('slugPlaceholder')}">
       <button type="button" class="btn" style="flex:0 0 auto;width:auto;padding:10px 20px" onclick="addEvent()">${t('create')}</button>
-    </div>
-    <ul class="event-list" id="event-list"></ul>`;
+    </div>`;
   loadEvents();
 }
 
 async function loadEvents() {
   const res = await fetch(apiUrl('/api/events'));
   const events = await res.json();
-  document.getElementById('event-list').innerHTML = events.map(e => `
+  const wrap = document.getElementById('event-list-wrap');
+  if (!events.length) {
+    wrap.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:24px 0">${t('noEvents')}</p>`;
+    return;
+  }
+  wrap.innerHTML = `<ul class="event-list">${events.map(e => {
+    const eventUrl = location.origin + navUrl('/event/' + e.slug);
+    return `
     <li>
-      <div>
+      <div class="event-header">
         <a href="${navUrl('/event/'+e.slug)}" onclick="event.preventDefault();navigate('/event/${e.slug}')">${escHtml(e.name)}</a>
-        <div style="font-size:.75rem;color:var(--text-muted)">/event/${e.slug}</div>
+        <span style="font-size:.8rem;color:var(--text-muted)">${e.responses} ${t('responses')}</span>
       </div>
-      <a href="${navUrl('/results/'+e.slug)}" onclick="event.preventDefault();navigate('/results/${e.slug}')" style="font-size:.85rem">${t('resultsLink')}</a>
-    </li>`).join('');
+      <div class="event-meta">/event/${e.slug} · ${e.created_at ? e.created_at.slice(0,10) : ''}</div>
+      <div class="event-actions">
+        <button class="btn-sm-outline" onclick="copyEventLink('${escHtml(eventUrl)}', this)">${t('copyLink')}</button>
+        <a class="btn-sm" href="${navUrl('/results/'+e.slug)}" onclick="event.preventDefault();navigate('/results/${e.slug}')">${t('resultsLink')}</a>
+        <button class="btn-sm-danger" onclick="deleteEvent('${e.slug}')">${t('deleteEvent')}</button>
+      </div>
+    </li>`;
+  }).join('')}</ul>`;
+}
+
+function copyEventLink(url, btn) {
+  navigator.clipboard.writeText(url).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = t('copied');
+    btn.classList.add('btn-copy-ok');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('btn-copy-ok'); }, 1500);
+  });
+}
+
+async function deleteEvent(slug) {
+  if (!confirm(t('confirmDelete'))) return;
+  const res = await fetch(apiUrl('/api/events/' + slug), { method: 'DELETE' });
+  if (res.ok) loadEvents();
 }
 
 async function addEvent() {

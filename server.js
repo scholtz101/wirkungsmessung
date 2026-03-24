@@ -108,10 +108,24 @@ app.post('/api/events', (req, res) => {
   }
 });
 
-// API: List events (admin)
+// API: List events (admin) — with response count
 app.get('/api/events', (req, res) => {
-  const events = db.prepare('SELECT id, name, slug, active, created_at FROM events ORDER BY created_at DESC').all();
+  const events = db.prepare(`
+    SELECT e.id, e.name, e.slug, e.active, e.created_at,
+      (SELECT COUNT(*) FROM responses WHERE event_id = e.id) as responses
+    FROM events e ORDER BY e.created_at DESC
+  `).all();
   res.json(events);
+});
+
+// API: Delete event (admin)
+app.delete('/api/events/:slug', (req, res) => {
+  const { slug } = req.params;
+  const event = db.prepare('SELECT id FROM events WHERE slug = ?').get(slug);
+  if (!event) return res.status(404).json({ error: 'Event nicht gefunden' });
+  db.prepare('DELETE FROM responses WHERE event_id = ?').run(event.id);
+  db.prepare('DELETE FROM events WHERE id = ?').run(event.id);
+  res.json({ ok: true });
 });
 
 // API: Export CSV
