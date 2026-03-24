@@ -459,7 +459,7 @@ function renderResults(slug) {
 
 async function loadResults(slug) {
   try {
-    const res = await fetch(apiUrl(`/api/results/${slug}`));
+    const res = await fetch(apiUrl(`/api/results/${slug}`), { cache: 'no-store' });
     renderResultsData(await res.json(), slug);
   } catch (e) {
     document.getElementById('results-content').innerHTML = '<p>' + t('loadError') + '</p>';
@@ -522,7 +522,7 @@ function renderAdmin() {
 }
 
 async function loadEvents() {
-  const res = await fetch(apiUrl('/api/events'));
+  const res = await fetch(apiUrl('/api/events'), { cache: 'no-store' });
   const events = await res.json();
   const wrap = document.getElementById('event-list-wrap');
   if (!events.length) {

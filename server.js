@@ -39,7 +39,18 @@ if (!defaultEvent) {
 }
 
 app.use(express.json());
-app.use(express.static(join(__dirname, 'public')));
+
+// No caching for API and HTML
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
+app.use(express.static(join(__dirname, 'public'), {
+  setHeaders(res, path) {
+    if (path.endsWith('.html')) res.set('Cache-Control', 'no-cache');
+  }
+}));
 
 // SSE clients per event
 const sseClients = new Map();
@@ -153,8 +164,10 @@ function getStats(eventId) {
   return { total, rahmen, relevanz, weiterverfolgen, freitexte };
 }
 
-// SPA fallback for /event/:slug and /results/:slug and /admin
-app.get(['/event/:slug', '/results/:slug', '/admin'], (req, res) => {
+// SPA fallback — serve index.html for all non-API, non-file routes
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) return next();
+  res.set('Cache-Control', 'no-cache');
   res.sendFile(join(__dirname, 'public', 'index.html'));
 });
 
